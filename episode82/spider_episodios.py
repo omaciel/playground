@@ -12,15 +12,19 @@ class EpisodesSpider(scrapy.Spider):
                 ]
 
     def parse(self, response):
+        '''O método parse concatena a variável episodes com a variável date,
+        gerando assim um dicionário, onde as chaves são os nomes dos episódios
+        e os valores a data no qual o mesmo foi lançado.'''
+
         episodes = response.xpath(
             '//*[@id="content"]/div/div[2]/div[2]/div/table/tbody/tr/td[2]/'
             'span/span[2]/text()').extract()
 
-        cont = 0
+        date = response.xpath(
+            '//*[@id="content"]/div/div[2]/div[2]/div/table/tbody/tr/'
+            'td[4]/span/span/text()')
+
         castalio = {}
-        for episode in episodes:
-            castalio[episode] = response.xpath(
-                '//*[@id="content"]/div/div[2]/div[2]/div/table/tbody/tr/'
-                'td[4]/span/span/text()')[cont].extract()
-            cont += 1
+        for index, episode in enumerate(episodes):
+            castalio[episode] = date[index].extract()
         return castalio
